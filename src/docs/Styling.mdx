@@ -1,0 +1,89 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="API/Styling" />
+
+# Styling
+
+ChronoScope is fully headless — it renders semantic HTML with zero default styles. All visual customization flows through the `classNames` prop.
+
+## ClassNames Map
+
+Every component accepts `classNames?: Partial<ChronoScopeClassNames>`. The map has 60+ slots organized by section:
+
+| Section | Slots |
+|---------|-------|
+| **Root** | `root` |
+| **Toolbar** | `toolbar`, `toolbarNavGroup`, `navButton`, `navButtonIcon` |
+| **Trigger** | `trigger`, `triggerOpen`, `triggerIcon`, `triggerLabel`, `triggerChevron` |
+| **Live Toggle** | `liveButton`, `liveButtonActive`, `liveDot`, `liveDotActive` |
+| **Dropdown** | `dropdown`, `dropdownContent` |
+| **Tabs** | `tabList`, `tab`, `tabActive`, `tabIcon`, `tabLabel` |
+| **Quick Ranges** | `quickPanel`, `quickSearch`, `quickList`, `quickItem`, `quickItemActive`, `quickItemLabel`, `quickItemDot`, `quickEmpty` |
+| **Calendar** | `calendar`, `calendarHeader`, `calendarNavButton`, `calendarTitle`, `calendarGrid`, `calendarDay`, `calendarDayToday`, `calendarDaySelected`, `calendarDayInRange`, `calendarDayDisabled` |
+| **Time Input** | `timeInput`, `timeInputLabel`, `timeInputFields`, `timeInputField`, `timeInputSeparator`, `timeInputPeriod` |
+| **Relative** | `relativePanel`, `relativeForm`, `relativeFormInput`, `relativeFormSelect`, `relativePreview` |
+
+## Presets
+
+Three presets are included. Each exports a `ChronoScopeClassNames` object:
+
+```tsx
+// Tailwind CSS
+import { tailwindDark, tailwindLight } from 'chronoscope-react/presets/tailwind';
+
+// Bootstrap 5
+import { bootstrapDark, bootstrapLight } from 'chronoscope-react/presets/bootstrap';
+
+// Unstyled (minimal)
+import { unstyledPreset } from 'chronoscope-react/presets/unstyled';
+```
+
+## Merging & Overriding
+
+Use `mergeClassNames` to layer overrides on a preset:
+
+```tsx
+import { mergeClassNames } from 'chronoscope-react';
+import { tailwindDark } from 'chronoscope-react/presets/tailwind';
+
+// Append mode — adds classes
+const custom = mergeClassNames(tailwindDark, {
+  root: "my-custom-root",
+  trigger: "shadow-lg",
+});
+
+// Replace mode — prefix with "!" to replace instead of append
+const replaced = mergeClassNames(tailwindDark, {
+  trigger: "!my-completely-different-trigger",
+});
+```
+
+## Custom Renderers
+
+Every component supports render props for full control over individual elements:
+
+```tsx
+<ChronoScope
+  cs={cs}
+  classNames={tailwindDark}
+  renderTrigger={(cs, cn) => (
+    <button className={cn.trigger} onClick={cs.range.toggle}>
+      {cs.range.displayLabel}
+    </button>
+  )}
+  renderQuickItem={(range, isActive, onSelect, cn) => (
+    <div className={isActive ? cn.quickItemActive : cn.quickItem} onClick={onSelect}>
+      {range.label}
+    </div>
+  )}
+  renderDay={(day, onSelect, cn) => (
+    <button
+      className={day.isSelected ? cn.calendarDaySelected : cn.calendarDay}
+      onClick={onSelect}
+      disabled={day.isDisabled}
+    >
+      {day.date || ''}
+    </button>
+  )}
+/>
+```

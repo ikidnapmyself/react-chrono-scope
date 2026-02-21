@@ -1,0 +1,86 @@
+import type { ChronoScopeClassNames } from "../../types";
+
+/**
+ * Unstyled preset — every slot is an empty string.
+ *
+ * Components render pure semantic HTML with data-cs-* attributes
+ * on every element, so you can target them in plain CSS:
+ *
+ *   [data-cs="trigger"] { ... }
+ *   [data-cs="dropdown"] { ... }
+ *   [data-cs="calendar-day"][data-selected] { ... }
+ *
+ * This is the default when no preset is provided.
+ */
+export const unstyledPreset: ChronoScopeClassNames = {
+  root: "",
+  toolbar: "",
+  toolbarNavGroup: "",
+  navButton: "",
+  navButtonIcon: "",
+  triggerWrapper: "",
+  trigger: "",
+  triggerOpen: "",
+  triggerIcon: "",
+  triggerLabel: "",
+  triggerChevron: "",
+  liveButton: "",
+  liveButtonActive: "",
+  liveDot: "",
+  liveDotActive: "",
+  dropdown: "",
+  dropdownContent: "",
+  tabList: "",
+  tab: "",
+  tabActive: "",
+  tabIcon: "",
+  tabLabel: "",
+  quickPanel: "",
+  quickSearch: "",
+  quickList: "",
+  quickItem: "",
+  quickItemActive: "",
+  quickItemLabel: "",
+  quickItemDot: "",
+  quickEmpty: "",
+  absolutePanel: "",
+  calendarRow: "",
+  calendarDivider: "",
+  calendar: "",
+  calendarLabel: "",
+  calendarHeader: "",
+  calendarNavButton: "",
+  calendarTitle: "",
+  calendarWeekRow: "",
+  calendarWeekDay: "",
+  calendarGrid: "",
+  calendarDayEmpty: "",
+  calendarDay: "",
+  calendarDayToday: "",
+  calendarDaySelected: "",
+  calendarDayInRange: "",
+  calendarDayDisabled: "",
+  timeRow: "",
+  timeInput: "",
+  timeInputLabel: "",
+  timeInputFields: "",
+  timeInputField: "",
+  timeInputSeparator: "",
+  timeInputPeriod: "",
+  absoluteFooter: "",
+  absoluteRangeDisplay: "",
+  absoluteRangeLabel: "",
+  absoluteRangeValue: "",
+  absoluteRangeSeparator: "",
+  applyButton: "",
+  relativePanel: "",
+  relativeDescription: "",
+  relativeAccent: "",
+  relativeForm: "",
+  relativeFormLabel: "",
+  relativeFormInput: "",
+  relativeFormSelect: "",
+  relativePreview: "",
+  relativePreviewLabel: "",
+  relativePreviewValue: "",
+};

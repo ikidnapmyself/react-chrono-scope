@@ -1,0 +1,187 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="API/Hooks" />
+
+# Hooks API
+
+All feature hooks accept `useRangeState` return as their first argument. This shared state pattern enables independent hooks to coordinate through a single source of truth.
+
+---
+
+## useRangeState
+
+Core state hook. Manages from/to dates, open/close state, formatting, and min/max clamping.
+
+```tsx
+const range = useRangeState({
+  defaultFrom: new Date('2024-01-01'),
+  defaultTo: new Date('2024-01-02'),
+  onChange: (range, meta) => console.log(range, meta),
+  minDate: new Date('2023-01-01'),
+  maxDate: new Date('2025-12-31'),
+  clampToLimits: true,
+});
+```
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `defaultFrom` | `Date` | Initial start date (default: 6h ago) |
+| `defaultTo` | `Date` | Initial end date (default: now) |
+| `onChange` | `(range, meta) => void` | Called on every range change |
+| `minDate` / `maxDate` | `Date` | Bounds for clamping |
+| `clampToLimits` | `boolean` | Enable date clamping |
+| `formatDate` | `(date) => string` | Custom formatter for display |
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `from` / `to` | `Date` | Current range |
+| `setFrom` / `setTo` | `(date) => void` | Set individual dates |
+| `setRange` | `(range, label?) => void` | Set both dates + optional label |
+| `isOpen` | `boolean` | Dropdown open state |
+| `open` / `close` / `toggle` | `() => void` | Control dropdown |
+| `displayLabel` | `string` | Formatted label for trigger |
+| `formattedFrom` / `formattedTo` | `string` | Formatted date strings |
+| `containerRef` | `RefObject` | Ref for click-outside detection |
+
+---
+
+## useQuickRanges
+
+Preset range selection with search filtering.
+
+```tsx
+const quick = useQuickRanges(range, {
+  ranges: DEFAULT_QUICK_RANGES,
+  defaultLabel: "Last 6 hours",
+});
+```
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `ranges` | `QuickRange[]` | Available preset ranges |
+| `activeLabel` | `string` or `null` | Currently selected label |
+| `filter` / `setFilter` | `string` / `(v) => void` | Search filter |
+| `filteredRanges` | `QuickRange[]` | Ranges matching the filter |
+| `select` | `(range) => void` | Select a range (updates state, fires onChange, closes dropdown) |
+
+---
+
+## useRelativeRange
+
+Relative time expression ("Last N units") with live preview.
+
+```tsx
+const relative = useRelativeRange(range, {
+  defaultValue: "30",
+  defaultUnit: "m",
+});
+```
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `value` / `setValue` | `string` | Numeric input value |
+| `unit` / `setUnit` | `TimeUnit` | Time unit (s/m/h/d/w/M/y) |
+| `timeUnits` | `TimeUnitOption[]` | Available unit options |
+| `preview` | `Date` | Preview of the computed "from" date |
+| `apply` | `() => void` | Apply the relative range |
+
+---
+
+## useRangeNavigation
+
+Shift and zoom controls. Shift moves by half the range duration; zoom scales by 2x.
+
+```tsx
+const nav = useRangeNavigation(range);
+```
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `shiftBack` / `shiftForward` | `() => void` | Move range by half its duration |
+| `zoomIn` / `zoomOut` | `() => void` | Scale range by 0.5x / 2x (centered) |
+
+---
+
+## useLiveRefresh
+
+Auto-refresh toggle with configurable interval.
+
+```tsx
+const live = useLiveRefresh(range, {
+  interval: 5000,
+  onToggle: (isLive) => console.log(isLive),
+  refreshFn: () => ({ from: fiveMinAgo(), to: new Date() }),
+});
+```
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `isLive` | `boolean` | Whether live mode is active |
+| `toggle` | `() => void` | Toggle live mode |
+| `setLive` | `(live) => void` | Set live mode explicitly |
+
+---
+
+## useCalendar
+
+Calendar grid state with month navigation and day selection.
+
+```tsx
+const cal = useCalendar({
+  selected: date,
+  onSelect: setDate,
+  rangeStart: from,
+  rangeEnd: to,
+  weekStartsOn: 1, // Monday
+});
+```
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `viewYear` / `viewMonth` | `number` | Current view |
+| `monthName` | `string` | Display name ("January") |
+| `days` | `CalendarDay[]` | Grid cells with flags (isToday, isSelected, isInRange, isDisabled) |
+| `weekDays` | `string[]` | Day-of-week headers |
+| `prevMonth` / `nextMonth` | `() => void` | Navigate months |
+| `goToMonth` | `(year, month) => void` | Jump to month |
+| `selectDay` | `(day) => void` | Select a day |
+
+---
+
+## useTimeInput
+
+Time input fields with 12/24-hour format support.
+
+```tsx
+const time = useTimeInput({
+  value: date,
+  onChange: setDate,
+  hourFormat: 24,
+});
+```
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `hours` / `minutes` / `seconds` | `string` | Padded display values |
+| `period` | `"AM"` or `"PM"` | Period (12h mode only) |
+| `setHours` / `setMinutes` / `setSeconds` | `(val) => void` | Set values |
+| `setPeriod` | `(period) => void` | Toggle AM/PM |
+| `increment*` / `decrement*` | `() => void` | Step values with wrapping |
+
+---
+
+## useChronoScope
+
+Convenience composer that wires all hooks together.
+
+```tsx
+const cs = useChronoScope({
+  defaultQuickLabel: "Last 6 hours",
+  onChange: (range, meta) => console.log(range),
+  onLiveToggle: (isLive) => console.log(isLive),
+});
+
+// cs.range, cs.quick, cs.relative, cs.nav, cs.live, cs.mode, cs.setMode
+```
+
+Returns a structured object containing all sub-hook returns. Pass it to `<ChronoScope cs={cs} />` or destructure and use individual components.

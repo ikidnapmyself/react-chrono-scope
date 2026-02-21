@@ -1,0 +1,85 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# ChronoScope
+
+A hooks-first, design-agnostic date/time range picker for React.
+
+## Architecture
+
+ChronoScope follows a **composition-first** pattern. Every feature is an independent hook that can be used standalone or composed together.
+
+```
+useRangeState        Core shared state (from/to, open/close, formatting)
+  ├── useQuickRanges     Preset range selection with search
+  ├── useRelativeRange   "Last N units" with preview
+  ├── useRangeNavigation Shift back/forward, zoom in/out
+  ├── useLiveRefresh     Auto-refresh on interval
+  ├── useCalendar        Calendar grid, month navigation
+  └── useTimeInput       Hours/minutes/seconds with 12/24h
+```
+
+`useChronoScope` composes all of the above into a single return object for convenience.
+
+## Usage Patterns
+
+### Full Bundle
+
+```tsx
+import { useChronoScope, ChronoScope } from 'chronoscope-react';
+import { tailwindDark } from 'chronoscope-react/presets/tailwind';
+
+function App() {
+  const cs = useChronoScope({ onChange: (range, meta) => console.log(range) });
+  return <ChronoScope cs={cs} classNames={tailwindDark} />;
+}
+```
+
+### Individual Hooks
+
+```tsx
+import { useRangeState, useQuickRanges } from 'chronoscope-react';
+import { QuickRangesPanel } from 'chronoscope-react';
+
+function QuickPicker() {
+  const range = useRangeState({ onChange: (r) => console.log(r) });
+  const quick = useQuickRanges(range, { defaultLabel: "Last 1 hour" });
+
+  return <QuickRangesPanel quick={quick} />;
+}
+```
+
+### Mix and Match
+
+```tsx
+import { useRangeState, useQuickRanges, useRangeNavigation } from 'chronoscope-react';
+
+function Custom() {
+  const range = useRangeState();
+  const quick = useQuickRanges(range);
+  const nav = useRangeNavigation(range);
+
+  return (
+    <div>
+      <button onClick={nav.shiftBack}>Back</button>
+      <button onClick={nav.shiftForward}>Forward</button>
+      <QuickRangesPanel quick={quick} />
+    </div>
+  );
+}
+```
+
+## Styling
+
+ChronoScope ships with **zero default styles**. Every visual element is controlled via the `classNames` prop — a flat map of CSS class strings keyed by semantic slot names.
+
+Three presets are included:
+
+| Preset | Import Path |
+|--------|------------|
+| Tailwind Dark/Light | `chronoscope-react/presets/tailwind` |
+| Bootstrap Dark/Light | `chronoscope-react/presets/bootstrap` |
+| Unstyled | `chronoscope-react/presets/unstyled` |
+
+Use `mergeClassNames(preset, overrides)` to layer your own classes on top of a preset.
