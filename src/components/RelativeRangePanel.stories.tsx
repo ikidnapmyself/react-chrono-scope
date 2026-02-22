@@ -25,9 +25,9 @@ function RelativeRangePanelStory({
   );
 }
 
-const meta: Meta<typeof RelativeRangePanelStory> = {
+const meta: Meta<typeof RelativeRangePanel> = {
   title: "Components/RelativeRangePanel",
-  component: RelativeRangePanelStory,
+  component: RelativeRangePanel,
   parameters: {
     layout: "padded",
     docs: {
@@ -42,15 +42,16 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  render: () => <RelativeRangePanelStory />,
   parameters: { docs: { description: { story: "Default 5 minutes. Type a number and select a unit, then click Apply." } } },
 };
 
 export const PrefilledHours: Story = {
-  args: { defaultValue: "12", defaultUnit: "h" },
+  render: () => <RelativeRangePanelStory defaultValue="12" defaultUnit="h" />,
   parameters: { docs: { description: { story: "Pre-filled with 12 hours." } } },
 };
 
 export const PrefilledDays: Story = {
-  args: { defaultValue: "7", defaultUnit: "d" },
+  render: () => <RelativeRangePanelStory defaultValue="7" defaultUnit="d" />,
   parameters: { docs: { description: { story: "Pre-filled with 7 days." } } },
 };

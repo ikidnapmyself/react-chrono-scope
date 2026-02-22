@@ -20,9 +20,9 @@ function QuickRangesPanelStory({ ranges, defaultLabel }: { ranges?: QuickRange[]
   );
 }
 
-const meta: Meta<typeof QuickRangesPanelStory> = {
+const meta: Meta<typeof QuickRangesPanel> = {
   title: "Components/QuickRangesPanel",
-  component: QuickRangesPanelStory,
+  component: QuickRangesPanel,
   parameters: {
     layout: "padded",
     docs: {
@@ -37,21 +37,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  render: () => <QuickRangesPanelStory />,
   parameters: { docs: { description: { story: "Default quick ranges with all 15 presets. Type in the search box to filter." } } },
 };
 
 export const WithDefaultSelection: Story = {
-  args: { defaultLabel: "Last 1 hour" },
+  render: () => <QuickRangesPanelStory defaultLabel="Last 1 hour" />,
   parameters: { docs: { description: { story: "Pre-selects \"Last 1 hour\" on mount." } } },
 };
 
 export const CustomRanges: Story = {
-  args: {
-    ranges: [
-      { label: "Last 30 seconds", value: 30, unit: "s" },
-      { label: "Last 2 minutes", value: 2, unit: "m" },
-      { label: "Last 10 minutes", value: 10, unit: "m" },
-    ],
-  },
+  render: () => (
+    <QuickRangesPanelStory
+      ranges={[
+        { label: "Last 30 seconds", value: 30, unit: "s" },
+        { label: "Last 2 minutes", value: 2, unit: "m" },
+        { label: "Last 10 minutes", value: 10, unit: "m" },
+      ]}
+    />
+  ),
   parameters: { docs: { description: { story: "Custom ranges array replacing the defaults." } } },
 };

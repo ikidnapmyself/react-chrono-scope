@@ -34,9 +34,9 @@ function TimeInputPanelStory({
   );
 }
 
-const meta: Meta<typeof TimeInputPanelStory> = {
+const meta: Meta<typeof TimeInputPanel> = {
   title: "Components/TimeInputPanel",
-  component: TimeInputPanelStory,
+  component: TimeInputPanel,
   parameters: {
     layout: "padded",
     docs: {
@@ -51,20 +51,21 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  render: () => <TimeInputPanelStory />,
   parameters: { docs: { description: { story: "24-hour format with seconds." } } },
 };
 
 export const WithLabel: Story = {
-  args: { label: "From" },
+  render: () => <TimeInputPanelStory label="From" />,
   parameters: { docs: { description: { story: "With a label header to distinguish from/to time inputs." } } },
 };
 
 export const TwelveHour: Story = {
-  args: { label: "Time", hourFormat: 12 },
+  render: () => <TimeInputPanelStory label="Time" hourFormat={12} />,
   parameters: { docs: { description: { story: "12-hour format with AM/PM toggle button." } } },
 };
 
 export const NoSeconds: Story = {
-  args: { label: "Time", showSeconds: false },
+  render: () => <TimeInputPanelStory label="Time" showSeconds={false} />,
   parameters: { docs: { description: { story: "Hides the seconds field for simpler time selection." } } },
 };

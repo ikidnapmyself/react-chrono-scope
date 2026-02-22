@@ -40,9 +40,9 @@ function CalendarPanelStory({
   );
 }
 
-const meta: Meta<typeof CalendarPanelStory> = {
+const meta: Meta<typeof CalendarPanel> = {
   title: "Components/CalendarPanel",
-  component: CalendarPanelStory,
+  component: CalendarPanel,
   parameters: {
     layout: "padded",
     docs: {
@@ -57,20 +57,21 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  render: () => <CalendarPanelStory />,
   parameters: { docs: { description: { story: "Basic calendar with today highlighted and click-to-select." } } },
 };
 
 export const WithLabel: Story = {
-  args: { label: "From" },
+  render: () => <CalendarPanelStory label="From" />,
   parameters: { docs: { description: { story: "Calendar with a label header, useful when showing side-by-side from/to calendars." } } },
 };
 
 export const MondayStart: Story = {
-  args: { label: "Calendar", weekStartsOn: 1 },
+  render: () => <CalendarPanelStory label="Calendar" weekStartsOn={1} />,
   parameters: { docs: { description: { story: "Week starts on Monday. Pass `weekStartsOn: 1` to the `useCalendar` hook." } } },
 };
 
 export const WithRangeHighlight: Story = {
-  args: { label: "Range", showRange: true },
+  render: () => <CalendarPanelStory label="Range" showRange />,
   parameters: { docs: { description: { story: "Days between `rangeStart` and `rangeEnd` are highlighted with the `calendarDayInRange` class." } } },
 };

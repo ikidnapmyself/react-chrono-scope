@@ -19,9 +19,9 @@ function LiveToggleStory() {
   );
 }
 
-const meta: Meta<typeof LiveToggleStory> = {
+const meta: Meta<typeof LiveToggle> = {
   title: "Components/LiveToggle",
-  component: LiveToggleStory,
+  component: LiveToggle,
   parameters: {
     layout: "padded",
     docs: {
@@ -35,4 +35,6 @@ const meta: Meta<typeof LiveToggleStory> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  render: () => <LiveToggleStory />,
+};

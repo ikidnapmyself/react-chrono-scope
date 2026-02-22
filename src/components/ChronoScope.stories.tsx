@@ -101,9 +101,9 @@ function ChronoScopeStory({
   );
 }
 
-const meta: Meta<typeof ChronoScopeStory> = {
+const meta: Meta<typeof ChronoScope> = {
   title: "Composed/ChronoScope",
-  component: ChronoScopeStory,
+  component: ChronoScope,
   parameters: {
     layout: "padded",
     docs: {
@@ -118,30 +118,31 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  render: () => <ChronoScopeStory />,
   parameters: { docs: { description: { story: "All three tabs (quick, absolute, relative), toolbar with navigation arrows, and live toggle." } } },
 };
 
 export const QuickOnly: Story = {
-  args: { tabs: ["quick"], showToolbar: false, showLiveToggle: false },
+  render: () => <ChronoScopeStory tabs={["quick"]} showToolbar={false} showLiveToggle={false} />,
   parameters: { docs: { description: { story: "Quick ranges tab only, no toolbar or live toggle. Minimal setup for simple preset selection." } } },
 };
 
 export const AbsoluteOnly: Story = {
-  args: { tabs: ["absolute"] },
+  render: () => <ChronoScopeStory tabs={["absolute"]} />,
   parameters: { docs: { description: { story: "Absolute tab only with dual calendars and time inputs for precise date/time selection." } } },
 };
 
 export const TwelveHourFormat: Story = {
-  args: { hourFormat: 12, tabs: ["absolute"] },
+  render: () => <ChronoScopeStory hourFormat={12} tabs={["absolute"]} />,
   parameters: { docs: { description: { story: "12-hour clock format with AM/PM toggle in the time inputs." } } },
 };
 
 export const NoToolbar: Story = {
-  args: { showToolbar: false },
+  render: () => <ChronoScopeStory showToolbar={false} />,
   parameters: { docs: { description: { story: "Hides the navigation toolbar (shift/zoom buttons)." } } },
 };
 
 export const MondayStart: Story = {
-  args: { weekStartsOn: 1 },
+  render: () => <ChronoScopeStory weekStartsOn={1} />,
   parameters: { docs: { description: { story: "Calendar weeks start on Monday instead of Sunday." } } },
 };

@@ -20,9 +20,9 @@ function NavigationToolbarStory() {
   );
 }
 
-const meta: Meta<typeof NavigationToolbarStory> = {
+const meta: Meta<typeof NavigationToolbar> = {
   title: "Components/NavigationToolbar",
-  component: NavigationToolbarStory,
+  component: NavigationToolbar,
   parameters: {
     layout: "padded",
     docs: {
@@ -36,4 +36,6 @@ const meta: Meta<typeof NavigationToolbarStory> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  render: () => <NavigationToolbarStory />,
+};
