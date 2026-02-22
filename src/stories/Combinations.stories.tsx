@@ -130,7 +130,7 @@ function ManualCompose() {
 // ── Meta & Stories ───────────────────────────────────────────────
 
 const meta: Meta = {
-  title: "Combinations",
+  title: "Patterns",
   parameters: {
     layout: "padded",
     docs: {

@@ -14,30 +14,9 @@ const preview: Preview = {
       test: "todo",
     },
   },
-  globalTypes: {
-    theme: {
-      description: "CSS preset theme",
-      toolbar: {
-        title: "Theme",
-        icon: "paintbrush",
-        items: [
-          { value: "tailwindDark", title: "Tailwind Dark" },
-          { value: "tailwindLight", title: "Tailwind Light" },
-          { value: "bootstrapDark", title: "Bootstrap Dark" },
-          { value: "bootstrapLight", title: "Bootstrap Light" },
-          { value: "unstyled", title: "Unstyled" },
-        ],
-        dynamicTitle: true,
-      },
-    },
-  },
-  initialGlobals: {
-    theme: "tailwindDark",
-  },
   decorators: [
-    (Story, context) => {
-      const themeKey = context.globals.theme || "tailwindDark";
-      const theme = THEME_MAP[themeKey];
+    (Story) => {
+      const theme = THEME_MAP.tailwindDark;
 
       return (
         <ThemeContext.Provider value={theme}>
@@ -48,7 +27,6 @@ const preview: Preview = {
               background: theme.bg,
               color: theme.text,
               fontFamily: theme.font,
-              transition: "all 0.3s",
             }}
           >
             <Story />

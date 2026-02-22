@@ -37,14 +37,14 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
           ›
         </button>
       </div>
-      <div data-cs="calendar-week-row" className={cn.calendarWeekRow}>
+      <div data-cs="calendar-week-row" className={cn.calendarWeekRow} style={{ gridTemplateColumns: "repeat(7, 1fr)" }}>
         {cal.weekDays.map(day => (
           <div key={day} data-cs="calendar-week-day" className={cn.calendarWeekDay}>
             {day}
           </div>
         ))}
       </div>
-      <div data-cs="calendar-grid" className={cn.calendarGrid}>
+      <div data-cs="calendar-grid" className={cn.calendarGrid} style={{ gridTemplateColumns: "repeat(7, 1fr)" }}>
         {cal.days.map((day, i) => {
           if (day.date === 0) {
             return <div key={`empty-${i}`} data-cs="calendar-day-empty" className={cn.calendarDayEmpty} />;
@@ -71,9 +71,9 @@ export const CalendarPanel: React.FC<CalendarPanelProps> = ({
               data-disabled={day.isDisabled || undefined}
               className={cx(
                 cn.calendarDay,
-                day.isToday && cn.calendarDayToday,
+                day.isToday && !day.isSelected && cn.calendarDayToday,
                 day.isSelected && cn.calendarDaySelected,
-                day.isInRange && cn.calendarDayInRange,
+                day.isInRange && !day.isSelected && cn.calendarDayInRange,
                 day.isDisabled && cn.calendarDayDisabled,
               )}
               onClick={handleSelect}

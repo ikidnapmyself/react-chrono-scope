@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import type { Decorator } from "@storybook/react-vite";
 import { useChronoScope } from "../hooks/useChronoScope";
-import { ChronoScope } from "./ChronoScope";
-import { useTheme } from "../../.storybook/themes";
+import { ChronoScope } from "../components/ChronoScope";
+import { THEME_MAP, ThemeContext, useTheme } from "../../.storybook/themes";
 import { formatDateTime, formatDateShort, pad, generateTicks } from "../utils/date";
 import type { TimeRange, RangeChangeMeta, SelectionMode } from "../types";
 
@@ -13,7 +13,7 @@ interface EventEntry {
   to: Date;
 }
 
-function ChronoScopeStory({
+export function PresetDemo({
   tabs,
   showToolbar = true,
   showLiveToggle = true,
@@ -56,7 +56,6 @@ function ChronoScopeStory({
         weekStartsOn={weekStartsOn}
       />
 
-      {/* Range display */}
       <div style={{ display: "flex", gap: 12, marginTop: 16, fontSize: 11 }}>
         <div style={{ flex: 1, background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: theme.radius, padding: "8px 12px" }}>
           <div style={{ fontSize: 9, color: theme.textMuted, fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>FROM</div>
@@ -69,7 +68,6 @@ function ChronoScopeStory({
         </div>
       </div>
 
-      {/* Timeline */}
       <div style={{ marginTop: 12 }}>
         <div style={{ height: 3, background: `${theme.text}0A`, borderRadius: 2, overflow: "hidden", marginBottom: 4 }}>
           <div style={{ height: "100%", width: "100%", background: `linear-gradient(90deg, transparent, ${theme.accent}44, ${theme.accent}, ${theme.accent}44, transparent)` }} />
@@ -81,7 +79,6 @@ function ChronoScopeStory({
         </div>
       </div>
 
-      {/* Event log */}
       <div style={{ marginTop: 12, background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: theme.radius, overflow: "hidden" }}>
         <div style={{ padding: "6px 10px", borderBottom: `1px solid ${theme.border}`, display: "flex", justifyContent: "space-between" }}>
           <span style={{ fontSize: 9, fontWeight: 700, color: theme.textMuted, textTransform: "uppercase", letterSpacing: "1px" }}>onChange Events</span>
@@ -101,48 +98,15 @@ function ChronoScopeStory({
   );
 }
 
-const meta: Meta<typeof ChronoScope> = {
-  title: "Composed/ChronoScope",
-  component: ChronoScope,
-  parameters: {
-    layout: "padded",
-    docs: {
-      description: {
-        component: "The full composed picker. Uses `useChronoScope` to wire all hooks together and renders the complete UI with toolbar, tabs, and dropdown. Supports quick, absolute, and relative selection modes.",
-      },
-    },
-  },
-};
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {
-  render: () => <ChronoScopeStory />,
-  parameters: { docs: { description: { story: "All three tabs (quick, absolute, relative), toolbar with navigation arrows, and live toggle." } } },
-};
-
-export const QuickOnly: Story = {
-  render: () => <ChronoScopeStory tabs={["quick"]} showToolbar={false} showLiveToggle={false} />,
-  parameters: { docs: { description: { story: "Quick ranges tab only, no toolbar or live toggle. Minimal setup for simple preset selection." } } },
-};
-
-export const AbsoluteOnly: Story = {
-  render: () => <ChronoScopeStory tabs={["absolute"]} />,
-  parameters: { docs: { description: { story: "Absolute tab only with dual calendars and time inputs for precise date/time selection." } } },
-};
-
-export const TwelveHourFormat: Story = {
-  render: () => <ChronoScopeStory hourFormat={12} tabs={["absolute"]} />,
-  parameters: { docs: { description: { story: "12-hour clock format with AM/PM toggle in the time inputs." } } },
-};
-
-export const NoToolbar: Story = {
-  render: () => <ChronoScopeStory showToolbar={false} />,
-  parameters: { docs: { description: { story: "Hides the navigation toolbar (shift/zoom buttons)." } } },
-};
-
-export const MondayStart: Story = {
-  render: () => <ChronoScopeStory weekStartsOn={1} />,
-  parameters: { docs: { description: { story: "Calendar weeks start on Monday instead of Sunday." } } },
-};
+export function presetDecorator(themeKey: string): Decorator {
+  return (Story) => {
+    const theme = THEME_MAP[themeKey];
+    return (
+      <ThemeContext.Provider value={theme}>
+        <div style={{ minHeight: "100%", padding: 24, background: theme.bg, color: theme.text, fontFamily: theme.font, transition: "all 0.3s" }}>
+          <Story />
+        </div>
+      </ThemeContext.Provider>
+    );
+  };
+}
